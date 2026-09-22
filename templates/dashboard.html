@@ -1,0 +1,9 @@
+{% extends 'base.html' %}{% block title %}Dashboard{% endblock %}{% block head %}<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>{% endblock %}{% block content %}
+<div class="pagehead"><div><h1>Dashboard</h1><p>Welcome, {{ user_name }}</p></div><a class="button" href="{{ url_for('add_expense') }}">+ Add Expense</a></div>
+<div class="grid stats"><div class="card"><small>Total Expenses</small><b>₹{{ '%.2f'|format(total) }}</b></div><div class="card"><small>This Month</small><b>₹{{ '%.2f'|format(month_total) }}</b></div><div class="card"><small>Monthly Budget</small><b>₹{{ '%.2f'|format(budget) }}</b></div><div class="card"><small>Transactions</small><b>{{ count }}</b></div></div>
+<div class="card"><h2>Spending Risk: <span class="risk {{ risk.risk|lower }}">{{ risk.risk }}</span></h2><p>{{ risk.explanation }}</p><p>Remaining: ₹{{ '%.2f'|format(risk.remaining) }}</p><p>{{ risk.suggestion }}</p></div>
+<div class="grid two"><div class="card"><h2>Category Spending</h2><canvas id="catChart"></canvas><table><tr><th>Category</th><th>Total</th></tr>{% for r in category %}<tr><td>{{r.label}}</td><td>₹{{'%.2f'|format(r.total)}}</td></tr>{% endfor %}</table></div>
+<div class="card"><h2>Monthly Spending</h2><canvas id="monthChart"></canvas><table><tr><th>Month</th><th>Total</th></tr>{% for r in monthly %}<tr><td>{{r.label}}</td><td>₹{{'%.2f'|format(r.total)}}</td></tr>{% endfor %}</table></div></div>
+<div class="card"><h2>Recent Expenses</h2><table><tr><th>Date</th><th>Category</th><th>Amount</th></tr>{% for r in recent %}<tr><td>{{r.expense_date}}</td><td>{{r.category_name}}</td><td>₹{{'%.2f'|format(r.amount)}}</td></tr>{% endfor %}</table></div>
+<script>window.chartData={cat:{labels:{{category|map(attribute='label')|list|tojson}},data:{{category|map(attribute='total')|list|tojson}}},month:{labels:{{monthly|map(attribute='label')|list|tojson}},data:{{monthly|map(attribute='total')|list|tojson}}}};</script>
+{% endblock %}
